@@ -3,11 +3,13 @@ from google import genai
 from google.genai import types
 from pydantic import BaseModel
 
-class Item(BaseModel):
-    name: str
-    description: str
-    price: float
-    tax: float 
+class quizAnswers(BaseModel):
+    personality: str
+    weekend: str
+    solving: str
+    environtment: str 
+    role: str
+    motivates: str
 
 app = FastAPI()
 
