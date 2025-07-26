@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CareerMatch ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <style>
+      body {
+        font-family: 'Manrope', sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-[#f4f9ff] text-[#111518]">
+    <div class="max-w-3xl mx-auto py-10 px-4">
+      <header class="mb-8 text-center">
+        <h1 class="text-3xl font-extrabold text-[#7db9e8]">CareerMatch ✨</h1>
+        <p class="text-sm mt-1 text-[#555]">Discover suitable jobs based on your personality!</p>
+      </header>
+
+      <form id="quizForm" class="space-y-8">
+        <!-- Question Block -->
+        <div>
+          <h3 class="text-base font-semibold mb-3">💬 Describe your personality</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="quiz-choice">Outgoing and sociable
+              <input type="radio" name="personality" value="Outgoing and sociable" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice">Reserved and thoughtful
+              <input type="radio" name="personality" value="Reserved and thoughtful" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice">Creative and imaginative
+              <input type="radio" name="personality" value="Creative and imaginative" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice">Practical and organized
+              <input type="radio" name="personality" value="Practical and organized" class="sr-only peer" hidden />
+            </label>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-base font-semibold mb-3">📅 Describe your ideal weekend</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="quiz-choice">Exploring new places and activities
+              <input type="radio" name="weekend" value="Exploring new places and activities" class="sr-only peer"  hidden />
+            </label>
+            <label class="quiz-choice">Relaxing at home with hobbies
+              <input type="radio" name="weekend" value="Relaxing at home with hobbies" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice">Spending time with friends and family
+              <input type="radio" name="weekend" value="
+              Spending time with friends and family" class="sr-only peer"  hidden />
+            </label>
+            <label class="quiz-choice">Working on personal projects
+              <input type="radio" name="weekend" value="Working on personal projects" class="sr-only peer" hidden />
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-base font-semibold mb-3"> 🔍 How do you typically approach solving problems?</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="quiz-choice"> 
+              Analytical and detail-oriented
+              <input type="radio" name="solving" value="Analytical and detail-oriented" class="sr-only peer"  hidden />
+            </label>
+            <label class="quiz-choice">Collaborative and brainstorming-focused
+              <input type="radio" name="solving" value="Collaborative and brainstorming-focuseds" class="sr-only peer"  hidden />
+            </label>
+            <label class="quiz-choice">Intuitive and creative
+              <input type="radio" name="solving" value="
+              Intuitive and creative" class="sr-only peer"  class="sr-only peer"  hidden />
+            </label>
+            <label class="quiz-choice">Practical and hands-on
+              <input type="radio" name="solving" value="Practical and hands-on" class="sr-only peer" hidden />
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-base font-semibold mb-3"> 💻 What kind of work environment helps you do your best?</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="quiz-choice"> 
+              Structured and organized
+              <input type="radio" name="environment" value="Structured and organizedd" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice">Flexible and adaptable
+              <input type="radio" name="environment" value="Flexible and adaptable" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice"> Collaborative and team-oriented
+              <input type="radio" name="environment" value="
+              Collaborative and team-oriented" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice">Independent and self-directed
+              <input type="radio" name="environment" value="Independent and self-directed" class="sr-only peer" hidden />
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-base font-semibold mb-3"> 🤼 How do you like to work with others?</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="quiz-choice"> 
+              As a leader, taking charge
+              <input type="radio" name="role" value="As a leader, taking charge" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice">As a team player, contributing ideas
+              <input type="radio" name="role" value="As a team player, contributing ideas" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice"> Independently, with minimal interaction
+              <input type="radio" name="role" value="
+              Independently, with minimal interaction" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice">Collaboratively, sharing responsibilities
+              <input type="radio" name="role" value="Collaboratively, sharing responsibilities" class="sr-only peer" hidden />
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-base font-semibold mb-3"> 🎯 What motivates you most at work?</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <label class="quiz-choice"> 
+              Achieving goals and recognition
+              <input type="radio" name="motivates" value="
+              Achieving goals and recognition" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice">Making a positive impact
+              <input type="radio" name="motivates" value="Making a positive impact" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice"> Learning and personal growth
+              <input type="radio" name="motivates" value="
+              Learning and personal growth" class="sr-only peer" hidden />
+            </label>
+            <label class="quiz-choice">Financial rewards and stability
+              <input type="radio" name="motivates" value="Financial rewards and stability" class="sr-only peer" hidden />
+            </label>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <button
+            type="submit"
+            class="px-6 py-2 rounded-full bg-[#cce7ff] text-[#111518] font-semibold shadow hover:bg-[#b6dcfa] transition"
+          >
+             Find My Match ✨
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      const choices = document.querySelectorAll('.quiz-choice');
+      choices.forEach((label) => {
+        label.classList.add(
+          'border',
+          'rounded-xl',
+          'py-2',
+          'px-4',
+          'cursor-pointer',
+          'text-sm',
+          'hover:border-[#7db9e8]',
+          'transition',
+          'border-[#ddd]'
+        );
+
+        label.addEventListener('click', () => {
+          const input = label.querySelector('input');
+          const name = input.name;
+          document
+            .querySelectorAll(`input[name="${name}"]`)
+            .forEach((el) =>
+              el.parentElement.classList.remove('border-[3px]', 'border-[#7db9e8]')
+            );
+          label.classList.add('border-[3px]', 'border-[#7db9e8]');
+          input.checked = true;
+        });
+      });
+
+      document.getElementById('quizForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const getValue = (name) =>
+          document.querySelector(`input[name="${name}"]:checked`)?.value;
+
+        const payload = {
+          personality: getValue("personality"),
+          weekend: getValue("weekend"),
+          solving:getValue("solving"),
+          environment: getValue("environment"),
+          role: getValue("role"),
+          motivates:getValue("motivates")
+        };
+
+        console.log("Submitting:", payload);
+        alert("✨ submitting your form...");
+        // replace when im done 
+      });
+    </script>
+  </body>
+</html>
