@@ -198,9 +198,16 @@
           motivates:getValue("motivates")
         };
 
+        const allAnswered = Object.values(payload).every(
+          (value) => value !== undefined && value.trim() !== ""
+        );
+        if (!allAnswered) {
+          alert("Please answer all questions before submitting.");
+          return;
+        }
         console.log("Submitting:", payload);
-        alert("✨ submitting your form...");
-        // replace when im done 
+        alert("submitting your form✨✨✨");
+        // replace this when im done 
       });
     </script>
   </body>
