@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CareerMatch ✨</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet" />
+        <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+        <style>
+          body {
+            font-family: 'Manrope', sans-serif;
+          }
+        </style>
+      </head>
+      <body class="bg-[#f4f9ff] text-[#111518]">
+        <div class="max-w-3xl mx-auto py-10 px-4">
+          <header class="mb-8 text-center">
+            <h1 class="text-3xl font-extrabold text-[#7db9e8]">Your Match is Ready ✨</h1>
+            <p class="text-sm mt-1 text-[#555]">Based on your quiz answers, here's your result!</p>
+          </header>
+      
+          <div class="space-y-6" id="resultSection">
+            <script>
+                const result = JSON.parse(localStorage.getItem("careerMatchResult"));
+                if (!result) {
+                  document.getElementById("resultSection").innerHTML = "<p class='text-red-500'>No result found. Please take the quiz first.</p>";
+                } else {
+                  document.getElementById("resultSection").innerHTML = `
+                    <div class="bg-white shadow-md rounded-xl p-5">
+                      <h2 class="text-xl font-bold text-[#7db9e8]">${result.personality_label}</h2>
+                      <p class="mt-2"><strong>Job Matches:</strong> ${result.job_matches.join(", ")}</p>
+                      <p><strong>Strengths:</strong> ${result.strengths.join(", ")}</p>
+                      <p><strong>Growth Area:</strong> ${result.growth_area}</p>
+                      <p class="mt-4 text-sm text-[#555]">${result.explanation}</p>
+                    </div>
+                  `;
+                }
+              </script>
+          </div>
+      
+          
+        </div>
+      </body>\
+
+      <div class="text-center mt-10">
+        <a href="start.html" class="inline-block px-5 py-2 rounded-full bg-[#cce7ff] text-[#111518] font-semibold shadow hover:bg-[#b6dcfa] transition">
+          Take the quiz again
+        </a>
+      </div>
+</html>
+

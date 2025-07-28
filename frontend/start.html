@@ -207,8 +207,25 @@
         }
         console.log("Submitting:", payload);
         alert("submitting your form✨✨✨");
-        // replace this when im done 
-      });
+
+        fetch("https://career-match-0w4n.onrender.com/match", { 
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(payload),
+        })
+        .then((res => res.json()))
+        .then((data => {
+        localStorage.setItem("careerMatchData", JSON.stringify(data));
+        window.location.href = "result.html";
+        }))
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("An error occurred while submitting the form. Please try again.");
+        });
+      }
+      );
     </script>
   </body>
 </html>

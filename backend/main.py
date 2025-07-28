@@ -46,10 +46,10 @@ async def match(answer: quizAnswers):
     Format your answer as follows:
        {{
         "job_matches": ["Job 1", "Job 2"],
-        "explanation": "A brief explanation of why this job is a good fit.",
+        "personality_label": "fun and engaging personality label with a fun emoji",
         "strengths": ["Strength 1", "Strength 2", "Strength 3"],
         "growth_area": "One growth suggestion",
-        "personality_label": ""fun and engaging personality label with a fun emoji""
+        "explanation": "A brief explanation of why this job is a good fit.",
     }}
     """
     
