@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 import google.generativeai as genai
-from google.genai import types
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import os
