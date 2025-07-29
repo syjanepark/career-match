@@ -20,6 +20,10 @@ class quizAnswers(BaseModel):
     role: str
     motivates: str
 
+@app.get("/")
+async def root():
+    return {"message": "Welcome to the Career Coach API! Use /match endpoint to get job recommendations based on quiz answers."}
+
 
 @app.post("/match")
 async def match(answer: quizAnswers):

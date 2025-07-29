@@ -22,7 +22,7 @@
       
           <div class="space-y-6" id="resultSection">
             <script>
-                const result = JSON.parse(localStorage.getItem("careerMatchResult"));
+                const result = JSON.parse(localStorage.getItem("careerMatchData"));
                 if (!result) {
                   document.getElementById("resultSection").innerHTML = "<p class='text-red-500'>No result found. Please take the quiz first.</p>";
                 } else {
