@@ -218,7 +218,7 @@
         .then((res => res.json()))
         .then((data => {
         localStorage.setItem("careerMatchData", JSON.stringify(data));
-        window.location.href = "result.html";
+        window.location.href = "./result.html";
         }))
         .catch((error) => {
           console.error("Error:", error);

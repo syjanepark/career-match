@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-import google.generativeai as genai
+import anthropic
 from pydantic import BaseModel
 from dotenv import load_dotenv
 import os
@@ -8,7 +8,7 @@ import json
 
 load_dotenv()
 
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
 app = FastAPI()
 
@@ -56,11 +56,19 @@ async def match(answer: quizAnswers):
     }}
     """
     
-    model= genai.GenerativeModel("gemini-2.5-flash")
-    response = model.generate_content(prompt)
+    response = client.messages.create(
+        model="claude-3-5-sonnet-20241022",
+        max_tokens=1000,
+        messages=[
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    )
 
     # extract the response content
-    response_content = response.text
+    response_content = response.content[0].text
     # extract the inner JSON string
     match = re.search(r'\{.*\}', response_content, re.DOTALL)
     if not match:
