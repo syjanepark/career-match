@@ -4,18 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CareerMatch ✨</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-    <style>
-      body {
-        font-family: 'Manrope', sans-serif;
-      }
-    </style>
+    <link rel="stylesheet" href="./dist/output.css" />
   </head>
   <body class="bg-[#f4f9ff] text-[#111518]">
     <div class="max-w-3xl mx-auto py-10 px-4">
@@ -155,77 +144,134 @@
       </form>
     </div>
 
+    <script src="./config.js"></script>
     <script>
+      // Configuration
+      const API_BASE_URL = "https://career-match-0pw6.onrender.com";
+      const STORAGE_KEY = "careerMatchData";
+      
+      // UI Setup
       const choices = document.querySelectorAll('.quiz-choice');
       choices.forEach((label) => {
-        label.classList.add(
-          'border',
-          'rounded-xl',
-          'py-2',
-          'px-4',
-          'cursor-pointer',
-          'text-sm',
-          'hover:border-[#7db9e8]',
-          'transition',
-          'border-[#ddd]'
-        );
-
+        // Add base classes
+        label.classList.add('border', 'rounded-xl', 'py-2', 'px-4', 'cursor-pointer', 'text-sm', 'transition');
+        
+        // Add click handler
         label.addEventListener('click', () => {
           const input = label.querySelector('input');
           const name = input.name;
-          document
-            .querySelectorAll(`input[name="${name}"]`)
-            .forEach((el) =>
-              el.parentElement.classList.remove('border-[3px]', 'border-[#7db9e8]')
-            );
-          label.classList.add('border-[3px]', 'border-[#7db9e8]');
+          
+          // Remove selected state from all options in this group
+          document.querySelectorAll(`input[name="${name}"]`).forEach((el) => {
+            el.parentElement.classList.remove('selected');
+          });
+          
+          // Add selected state to clicked option
+          label.classList.add('selected');
           input.checked = true;
+          
+          console.log(`Selected ${name}: ${input.value}`);
         });
       });
 
-      document.getElementById('quizForm').addEventListener('submit', (e) => {
-        e.preventDefault();
+      // API Helper Functions
+      async function testBackendConnection() {
+        try {
+          const response = await fetch(`${API_BASE_URL}/`);
+          return response.ok;
+        } catch (error) {
+          console.error('Backend connection test failed:', error);
+          return false;
+        }
+      }
 
+      async function submitCareerMatch(payload) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/match`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+            timeout: 30000
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          return await response.json();
+        } catch (error) {
+          console.error('API Request failed:', error);
+          throw error;
+        }
+      }
+
+      // Form Submission Handler
+      document.getElementById('quizForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        console.log("Form submitted!");
+
+        // Get form data
         const getValue = (name) =>
           document.querySelector(`input[name="${name}"]:checked`)?.value;
 
         const payload = {
           personality: getValue("personality"),
           weekend: getValue("weekend"),
-          solving:getValue("solving"),
+          solving: getValue("solving"),
           environment: getValue("environment"),
           role: getValue("role"),
-          motivates:getValue("motivates")
+          motivates: getValue("motivates")
         };
 
+        console.log("Payload:", payload);
+
+        // Validate all questions are answered
         const allAnswered = Object.values(payload).every(
           (value) => value !== undefined && value.trim() !== ""
         );
+        
         if (!allAnswered) {
           alert("Please answer all questions before submitting.");
           return;
         }
-        console.log("Submitting:", payload);
-        alert("submitting your form✨✨✨");
 
-        fetch("https://career-match-0pw6.onrender.com/match", { 
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          body: JSON.stringify(payload),
-        })
-        .then((res => res.json()))
-        .then((data => {
-        localStorage.setItem("careerMatchData", JSON.stringify(data));
-        window.location.href = "./result.html";
-        }))
-        .catch((error) => {
+        // Show loading state
+        const submitButton = e.target.querySelector('button[type="submit"]');
+        const originalText = submitButton.textContent;
+        submitButton.textContent = "Processing... ✨";
+        submitButton.disabled = true;
+
+        try {
+          console.log("Submitting to backend:", payload);
+          
+          // Submit the form directly without connection test first
+          const result = await submitCareerMatch(payload);
+          console.log("Backend response:", result);
+          
+          // Store result and redirect
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(result));
+          console.log("Data stored, redirecting to result page...");
+          window.location.href = "./result.html";
+          
+        } catch (error) {
           console.error("Error:", error);
-          alert("An error occurred while submitting the form. Please try again.");
-        });
-      }
-      );
+          alert(`An error occurred: ${error.message}. Please try again.`);
+        } finally {
+          // Restore button state
+          submitButton.textContent = originalText;
+          submitButton.disabled = false;
+        }
+      });
+
+      // Test backend connection on page load
+      window.addEventListener('load', async () => {
+        const isConnected = await testBackendConnection();
+        if (!isConnected) {
+          console.warn('Backend connection test failed on page load');
+        }
+      });
     </script>
   </body>
 </html>

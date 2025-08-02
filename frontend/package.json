@@ -1,6 +1,16 @@
 {
-  "dependencies": {
-    "@tailwindcss/vite": "^4.1.11",
-    "tailwindcss": "^4.1.11"
+  "name": "careermatch-frontend",
+  "version": "1.0.0",
+  "description": "CareerMatch Frontend",
+  "scripts": {
+    "build": "tailwindcss -i ./styles.css -o ./dist/output.css",
+    "watch": "tailwindcss -i ./styles.css -o ./dist/output.css --watch",
+    "dev": "npx http-server . -p 3000"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17"
   }
 }

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Test</title>
+    <link rel="stylesheet" href="./dist/output.css" />
+</head>
+<body class="bg-[#f4f9ff] text-[#111518]">
+    <div class="max-w-3xl mx-auto py-10 px-4">
+        <h1 class="text-3xl font-extrabold text-[#7db9e8] text-center mb-8">Form Test</h1>
+        
+        <form id="testForm" class="space-y-8">
+            <div>
+                <h3 class="text-base font-semibold mb-3">Test Question</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="quiz-choice">
+                        Option 1
+                        <input type="radio" name="test" value="option1" class="sr-only peer" hidden />
+                    </label>
+                    <label class="quiz-choice">
+                        Option 2
+                        <input type="radio" name="test" value="option2" class="sr-only peer" hidden />
+                    </label>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button type="submit" class="px-6 py-2 rounded-full bg-[#cce7ff] text-[#111518] font-semibold shadow hover:bg-[#b6dcfa] transition">
+                    Test Submit
+                </button>
+            </div>
+        </form>
+        
+        <div id="result" class="mt-8 p-4 bg-white rounded-xl shadow-md"></div>
+    </div>
+
+    <script>
+        // UI Setup
+        const choices = document.querySelectorAll('.quiz-choice');
+        choices.forEach((label) => {
+            // Add base classes
+            label.classList.add('border', 'rounded-xl', 'py-2', 'px-4', 'cursor-pointer', 'text-sm', 'transition');
+            
+            label.addEventListener('click', () => {
+                const input = label.querySelector('input');
+                const name = input.name;
+                document
+                    .querySelectorAll(`input[name="${name}"]`)
+                    .forEach((el) =>
+                        el.parentElement.classList.remove('selected')
+                    );
+                label.classList.add('selected');
+                input.checked = true;
+                console.log(`Selected ${name}: ${input.value}`);
+            });
+        });
+
+        // Form submission test
+        document.getElementById('testForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            console.log("Test form submitted!");
+            
+            const testValue = document.querySelector('input[name="test"]:checked')?.value;
+            console.log("Selected value:", testValue);
+            
+            if (!testValue) {
+                alert("Please select an option");
+                return;
+            }
+            
+            // Test backend connection
+            try {
+                const response = await fetch('https://career-match-0pw6.onrender.com/');
+                const data = await response.json();
+                console.log("Backend health check:", data);
+                
+                document.getElementById('result').innerHTML = `
+                    <h3 class="font-bold text-[#7db9e8]">Test Results:</h3>
+                    <p><strong>Selected:</strong> ${testValue}</p>
+                    <p><strong>Backend Status:</strong> ✅ Connected</p>
+                    <p><strong>Response:</strong> ${JSON.stringify(data)}</p>
+                `;
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById('result').innerHTML = `
+                    <h3 class="font-bold text-red-500">Test Results:</h3>
+                    <p><strong>Selected:</strong> ${testValue}</p>
+                    <p><strong>Backend Status:</strong> ❌ Error</p>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Debug</title>
+    <link rel="stylesheet" href="./dist/output.css" />
+    <style>
+        .debug-info {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body class="bg-[#f4f9ff] text-[#111518]">
+    <div class="max-w-3xl mx-auto py-10 px-4">
+        <h1 class="text-3xl font-extrabold text-[#7db9e8] text-center mb-8">Button Debug Test</h1>
+        
+        <div class="debug-info">
+            <h3>Debug Info:</h3>
+            <p>Total quiz-choice elements: <span id="choiceCount">0</span></p>
+            <p>Last clicked: <span id="lastClicked">None</span></p>
+            <p>Selected values: <span id="selectedValues">None</span></p>
+        </div>
+        
+        <form id="debugForm" class="space-y-8">
+            <div>
+                <h3 class="text-base font-semibold mb-3">Test Question 1</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="quiz-choice">
+                        Option A
+                        <input type="radio" name="question1" value="A" class="sr-only peer" hidden />
+                    </label>
+                    <label class="quiz-choice">
+                        Option B
+                        <input type="radio" name="question1" value="B" class="sr-only peer" hidden />
+                    </label>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-base font-semibold mb-3">Test Question 2</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label class="quiz-choice">
+                        Option X
+                        <input type="radio" name="question2" value="X" class="sr-only peer" hidden />
+                    </label>
+                    <label class="quiz-choice">
+                        Option Y
+                        <input type="radio" name="question2" value="Y" class="sr-only peer" hidden />
+                    </label>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <button type="submit" class="px-6 py-2 rounded-full bg-[#cce7ff] text-[#111518] font-semibold shadow hover:bg-[#b6dcfa] transition">
+                    Test Submit
+                </button>
+            </div>
+        </form>
+        
+        <div id="result" class="mt-8 p-4 bg-white rounded-xl shadow-md"></div>
+    </div>
+
+    <script>
+        console.log("Debug page loaded");
+        
+        // Update debug info
+        function updateDebugInfo() {
+            const choices = document.querySelectorAll('.quiz-choice');
+            const selectedInputs = document.querySelectorAll('input:checked');
+            const selectedValues = Array.from(selectedInputs).map(input => `${input.name}: ${input.value}`);
+            
+            document.getElementById('choiceCount').textContent = choices.length;
+            document.getElementById('selectedValues').textContent = selectedValues.join(', ') || 'None';
+        }
+        
+        // UI Setup
+        const choices = document.querySelectorAll('.quiz-choice');
+        console.log(`Found ${choices.length} quiz-choice elements`);
+        
+        choices.forEach((label, index) => {
+            console.log(`Setting up choice ${index + 1}:`, label);
+            
+            // Add base classes
+            label.classList.add('border', 'rounded-xl', 'py-2', 'px-4', 'cursor-pointer', 'text-sm', 'transition');
+            
+            // Add click handler
+            label.addEventListener('click', (e) => {
+                console.log(`Clicked on choice ${index + 1}`);
+                e.preventDefault();
+                
+                const input = label.querySelector('input');
+                const name = input.name;
+                
+                console.log(`Input name: ${name}, value: ${input.value}`);
+                
+                // Remove selected state from all options in this group
+                document.querySelectorAll(`input[name="${name}"]`).forEach((el) => {
+                    el.parentElement.classList.remove('selected');
+                });
+                
+                // Add selected state to clicked option
+                label.classList.add('selected');
+                input.checked = true;
+                
+                document.getElementById('lastClicked').textContent = `${name}: ${input.value}`;
+                updateDebugInfo();
+                
+                console.log(`Selected ${name}: ${input.value}`);
+            });
+        });
+        
+        // Form submission
+        document.getElementById('debugForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log("Form submitted!");
+            
+            const selectedInputs = document.querySelectorAll('input:checked');
+            const formData = {};
+            
+            selectedInputs.forEach(input => {
+                formData[input.name] = input.value;
+            });
+            
+            console.log("Form data:", formData);
+            
+            document.getElementById('result').innerHTML = `
+                <h3 class="font-bold text-[#7db9e8]">Form Data:</h3>
+                <pre>${JSON.stringify(formData, null, 2)}</pre>
+            `;
+        });
+        
+        // Initial debug info
+        updateDebugInfo();
+    </script>
+</body>
+</html> 

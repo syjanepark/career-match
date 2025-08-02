@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap');
+
+body {
+  font-family: 'Manrope', sans-serif;
+}
+
+.quiz-choice {
+  @apply border rounded-xl py-2 px-4 cursor-pointer text-sm hover:border-primary-300 transition border-gray-300;
+}
+
+.quiz-choice.selected {
+  @apply border-3 border-primary-300;
+} 
