@@ -9,19 +9,26 @@ import json
 
 load_dotenv()
 
-# Initialize Anthropic client with error handling
-try:
-    api_key = os.environ["ANTHROPIC_API_KEY"]
-    print(f"API key length: {len(api_key)}")
-    print(f"API key starts with: {api_key[:10]}...")
-    client = anthropic.Anthropic(api_key=api_key)
-    print("Anthropic client initialized successfully")
-except Exception as e:
-    print(f"Error initializing Anthropic client: {e}")
-    print(f"Error type: {type(e)}")
-    import traceback
-    traceback.print_exc()
-    client = None
+# Initialize client variable
+client = None
+
+def get_anthropic_client():
+    """Get or create Anthropic client"""
+    global client
+    if client is None:
+        try:
+            api_key = os.environ["ANTHROPIC_API_KEY"]
+            print(f"API key length: {len(api_key)}")
+            print(f"API key starts with: {api_key[:10]}...")
+            client = anthropic.Anthropic(api_key=api_key)
+            print("Anthropic client initialized successfully")
+        except Exception as e:
+            print(f"Error initializing Anthropic client: {e}")
+            print(f"Error type: {type(e)}")
+            import traceback
+            traceback.print_exc()
+            client = None
+    return client
 
 app = FastAPI()
 
@@ -57,11 +64,12 @@ async def root():
     # Check if API key is set (without exposing the actual key)
     api_key_set = "ANTHROPIC_API_KEY" in os.environ and os.environ["ANTHROPIC_API_KEY"] != ""
     api_key_length = len(os.environ.get("ANTHROPIC_API_KEY", ""))
+    client_status = get_anthropic_client() is not None
     return {
         "message": "Welcome to the Career Coach API! Use /match endpoint to get job recommendations based on quiz answers.",
         "api_key_configured": api_key_set,
         "api_key_length": api_key_length,
-        "client_initialized": client is not None
+        "client_initialized": client_status
     }
 
 @app.options("/match")
@@ -71,7 +79,8 @@ async def options_match():
 
 @app.post("/match")
 async def match(answer: quizAnswers):
-    # Check if client is initialized
+    # Get or create client
+    client = get_anthropic_client()
     if client is None:
         return {"error": "Anthropic client not initialized. Please check your API key."}
     
