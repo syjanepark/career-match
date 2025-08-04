@@ -11,10 +11,21 @@ load_dotenv()
 
 # Initialize Anthropic client
 try:
-    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+    api_key = os.environ["ANTHROPIC_API_KEY"]
+    print(f"API key length: {len(api_key)}")
+    print(f"API key format check: {api_key.startswith('sk-ant-')}")
+    
+    # Test if we can import anthropic properly
+    print(f"Anthropic module: {anthropic}")
+    print(f"Anthropic version: {anthropic.__version__}")
+    
+    client = anthropic.Anthropic(api_key=api_key)
     print("Anthropic client initialized successfully")
 except Exception as e:
     print(f"Error initializing Anthropic client: {e}")
+    print(f"Error type: {type(e)}")
+    import traceback
+    traceback.print_exc()
     client = None
 
 app = FastAPI()
