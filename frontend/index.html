@@ -177,7 +177,13 @@
       // API Helper Functions
       async function testBackendConnection() {
         try {
-          const response = await fetch(`${API_BASE_URL}/`);
+          const response = await fetch(`${API_BASE_URL}/`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            mode: 'cors'
+          });
           return response.ok;
         } catch (error) {
           console.error('Backend connection test failed:', error);
@@ -193,7 +199,7 @@
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload),
-            timeout: 30000
+            mode: 'cors'
           });
 
           if (!response.ok) {

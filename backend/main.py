@@ -16,10 +16,18 @@ app = FastAPI()
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:8000", 
+        "http://127.0.0.1:5500",
+        "https://career-match-1.onrender.com",
+        "https://career-match-0pw6.onrender.com",
+        "*"  # Allow all origins for development
+    ],
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 class quizAnswers(BaseModel):
@@ -33,6 +41,10 @@ class quizAnswers(BaseModel):
 @app.get("/")
 async def root():
     return {"message": "Welcome to the Career Coach API! Use /match endpoint to get job recommendations based on quiz answers."}
+
+@app.options("/match")
+async def options_match():
+    return {"message": "OPTIONS request handled"}
 
 
 @app.post("/match")
