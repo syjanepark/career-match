@@ -1,4 +1,4 @@
-#!/Users/jane/Desktop/career-match/venv/bin/python3
+#!/Users/jane/Documents/GitHub/career-match/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
