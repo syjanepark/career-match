@@ -47,7 +47,13 @@ class quizAnswers(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to the Career Coach API! Use /match endpoint to get job recommendations based on quiz answers."}
+    # Check if API key is set (without exposing the actual key)
+    api_key_set = "ANTHROPIC_API_KEY" in os.environ and os.environ["ANTHROPIC_API_KEY"] != ""
+    return {
+        "message": "Welcome to the Career Coach API! Use /match endpoint to get job recommendations based on quiz answers.",
+        "api_key_configured": api_key_set,
+        "client_initialized": client is not None
+    }
 
 @app.options("/match")
 async def options_match():
