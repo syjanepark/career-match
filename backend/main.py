@@ -22,6 +22,8 @@ app.add_middleware(
         "http://127.0.0.1:5500",
         "https://career-match-1.onrender.com",
         "https://career-match-0pw6.onrender.com",
+        "https://career-match-rho.vercel.app",  # Your specific Vercel domain
+        "https://*.vercel.app",  # Allow all Vercel domains
         "*"  # Allow all origins for development
     ],
     allow_credentials=True,
