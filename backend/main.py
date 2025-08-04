@@ -9,7 +9,12 @@ import json
 
 load_dotenv()
 
-client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+# Initialize Anthropic client with error handling
+try:
+    client = anthropic.Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
+except Exception as e:
+    print(f"Error initializing Anthropic client: {e}")
+    client = None
 
 app = FastAPI()
 
@@ -51,6 +56,10 @@ async def options_match():
 
 @app.post("/match")
 async def match(answer: quizAnswers):
+    # Check if client is initialized
+    if client is None:
+        return {"error": "Anthropic client not initialized. Please check your API key."}
+    
     # This function will match the user's answers to a job
     answers = answer.dict()
     personality = answers.get("personality")
@@ -80,31 +89,35 @@ async def match(answer: quizAnswers):
     }}
     """
     
-    response = client.messages.create(
-        model="claude-3-5-sonnet-20241022",
-        max_tokens=1000,
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
-
-    # extract the response content
-    response_content = response.content[0].text
-    # extract the inner JSON string
-    match = re.search(r'\{.*\}', response_content, re.DOTALL)
-    if not match:
-        return {"error": "Failed to extract JSON from the AI model response."}
-    response_content = match.group(0)
-    # Parsing the response content to a dictionary
     try:
-        response_dict = json.loads(response_content)
-    except json.JSONDecodeError:
-        return {"error": "Failed to parse the response from the AI model."} 
+        response = client.messages.create(
+            model="claude-3-5-sonnet-20241022",
+            max_tokens=1000,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
+
+        # extract the response content
+        response_content = response.content[0].text
+        # extract the inner JSON string
+        match = re.search(r'\{.*\}', response_content, re.DOTALL)
+        if not match:
+            return {"error": "Failed to extract JSON from the AI model response."}
+        response_content = match.group(0)
+        # Parsing the response content to a dictionary
+        try:
+            response_dict = json.loads(response_content)
+        except json.JSONDecodeError:
+            return {"error": "Failed to parse the response from the AI model."} 
+            
+        # Return the response dictionary
+        return response_dict
         
-    # Return the response dictionary
-    return response_dict
+    except Exception as e:
+        return {"error": f"Anthropic API error: {str(e)}"}
 
     
