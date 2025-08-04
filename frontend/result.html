@@ -14,17 +14,52 @@
       
           <div class="space-y-6" id="resultSection">
             <script>
-                const result = JSON.parse(localStorage.getItem("careerMatchData"));
-                if (!result) {
-                  document.getElementById("resultSection").innerHTML = "<p class='text-red-500'>No result found. Please take the quiz first.</p>";
-                } else {
+                try {
+                  const result = JSON.parse(localStorage.getItem("careerMatchData"));
+                  console.log("Result data:", result);
+                  
+                  if (!result) {
+                    document.getElementById("resultSection").innerHTML = "<p class='text-red-500'>No result found. Please take the quiz first.</p>";
+                  } else if (result.error) {
+                    // Handle error response from backend
+                    console.log("Handling error response:", result.error);
+                    document.getElementById("resultSection").innerHTML = `
+                      <div class="bg-red-50 border border-red-200 rounded-xl p-5">
+                        <h2 class="text-xl font-bold text-red-600">⚠️ Backend Error</h2>
+                        <p class="mt-2 text-red-700"><strong>Error:</strong> ${result.error}</p>
+                        <p class="mt-2 text-sm text-red-600">The backend is currently experiencing issues. Please try again later.</p>
+                      </div>
+                    `;
+                  } else if (!result.job_matches || !result.strengths) {
+                    // Handle incomplete data
+                    console.log("Handling incomplete data:", result);
+                    document.getElementById("resultSection").innerHTML = `
+                      <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-5">
+                        <h2 class="text-xl font-bold text-yellow-600">⚠️ Incomplete Data</h2>
+                        <p class="mt-2 text-yellow-700">The response format is unexpected. Please try again.</p>
+                        <pre class="mt-2 text-xs bg-gray-100 p-2 rounded">${JSON.stringify(result, null, 2)}</pre>
+                      </div>
+                    `;
+                  } else {
+                    // Handle successful response
+                    console.log("Handling successful response");
+                    document.getElementById("resultSection").innerHTML = `
+                      <div class="bg-white shadow-md rounded-xl p-5">
+                        <h2 class="text-xl font-bold text-[#7db9e8]">${result.personality_label || 'Career Match'}</h2>
+                        <p class="mt-2"><strong>Job Matches:</strong> ${Array.isArray(result.job_matches) ? result.job_matches.join(", ") : 'Not available'}</p>
+                        <p><strong>Strengths:</strong> ${Array.isArray(result.strengths) ? result.strengths.join(", ") : 'Not available'}</p>
+                        <p><strong>Growth Area:</strong> ${result.growth_area || 'Not available'}</p>
+                        <p class="mt-4 text-sm text-[#555]">${result.explanation || 'No explanation available'}</p>
+                      </div>
+                    `;
+                  }
+                } catch (error) {
+                  console.error("Error processing result:", error);
                   document.getElementById("resultSection").innerHTML = `
-                    <div class="bg-white shadow-md rounded-xl p-5">
-                      <h2 class="text-xl font-bold text-[#7db9e8]">${result.personality_label}</h2>
-                      <p class="mt-2"><strong>Job Matches:</strong> ${result.job_matches.join(", ")}</p>
-                      <p><strong>Strengths:</strong> ${result.strengths.join(", ")}</p>
-                      <p><strong>Growth Area:</strong> ${result.growth_area}</p>
-                      <p class="mt-4 text-sm text-[#555]">${result.explanation}</p>
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-5">
+                      <h2 class="text-xl font-bold text-red-600">⚠️ Error</h2>
+                      <p class="mt-2 text-red-700">An error occurred while processing the result. Please try again.</p>
+                      <p class="mt-2 text-sm text-red-600">Error details: ${error.message}</p>
                     </div>
                   `;
                 }
@@ -35,10 +70,12 @@
         </div>
       </body>\
 
-      <div class="text-center mt-10">
-        <a href="index.html" class="inline-block px-5 py-2 rounded-full bg-[#cce7ff] text-[#111518] font-semibold shadow hover:bg-[#b6dcfa] transition">
-          Take the quiz again
-        </a>
-      </div>
-</html>
+          <div class="text-center mt-10">
+            <a href="index.html" class="inline-block px-5 py-2 rounded-full bg-[#cce7ff] text-[#111518] font-semibold shadow hover:bg-[#b6dcfa] transition">
+              Take the quiz again
+            </a>
+          </div>
+        </div>
+      </body>
+    </html>
 
